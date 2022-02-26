@@ -11,3 +11,8 @@ yarn add styled-components
 - Instalar o react-switch
 yarn add react-switch
 
+- Instalar as definições do Styled Components para o Typescript:
+yarn add @types/styled-components
+
+- Instalar o Polished
+yarn add polished  
