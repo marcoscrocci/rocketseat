@@ -1,0 +1,10 @@
+- Instalar o Expo CLI
+sudo npm install -g expo-cli
+
+- Biblioteca do Firebase para React Native
+https://rnfirebase.io/
+yarn add @react-native-firebase/app
+
+yarn start
+yarn android
+
