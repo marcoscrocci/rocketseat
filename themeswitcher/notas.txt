@@ -1,0 +1,13 @@
+- Criar o projeto:
+create-react-app themeswitcher --template=typescript
+
+- Executar o projeto:
+cd themeswitcher
+yarn start
+
+- Instalar o Styled Components
+yarn add styled-components
+
+- Instalar o react-switch
+yarn add react-switch
+
