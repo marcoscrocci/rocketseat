@@ -5,6 +5,47 @@ sudo npm install -g expo-cli
 https://rnfirebase.io/
 yarn add @react-native-firebase/app
 
+- Obter o nome do pacote do Android, para adicionar ao projeto no Firebase:
+Abrir o arquivo: android/app/src/main/java/com/helpdesk/MainActivity.java
+Linha 1:   package com.helpdeskmarcos
+No site clicar em "Adicionar o Firebase ao seu app Android" (ícone do Android)
+No campo "Nome do pacote do Android": com.helpdeskmarcos
+
+Apelido do app (opcional): Helpdesk Marcos
+
+Certificado - Executar o comando:
+cd android && ./gradlew signingReport
+Usar a chave do tipo SHA1
+
+Fazer download do arquivo google-service.json
+
+Pular a etape sugerida no site do Firebase e verificar o passo a passo para configurar o 
+Android no site: https://rnfirebase.io/, com relação ao arquivo android/build.gradle
+
+Dentro do atributo dependencies colocar a linha:
+classpath("com.google.gms:google-services:4.3.10")
+
+No arquivo android/app/build.gradle adicionar a linha:
+apply plugin: "com.google.gms.google-services"
+
+- Depois tentar configurar para o iOS seguindo a documentação do site: https://rnfirebase.io/
+
+
+- Executar a aplicação para ele fazer o auto-link do código nativo e os arquivos de configuração do Firebase: 
 yarn start
 yarn android
+
+- Instalar o pacote de autenticação do Firebase: 
+https://rnfirebase.io/auth/usage
+# Install & setup the app module
+yarn add @react-native-firebase/app
+
+# Install the authentication module
+yarn add @react-native-firebase/auth
+
+# If you're developing your app using iOS, run this command
+cd ios/ && pod install
+
+
+
 
