@@ -1,0 +1,212 @@
+Como inicio meus apps com ReactJS? Next.js, TypeScript, ESLint e Styled Components | Code/Drops #50
+Fonte: https://www.youtube.com/watch?v=1nVUfZg2dSA&list=WL&index=6&t=718s
+
+- Criar o projeto Next.js, abrir a pasta do projeto e editar no VS Code:
+yarn create next-app nome-do-projeto
+cd nome-do-projeto
+code .
+
+- Neste projeto foram removidos os arquivos README.md, public/favicon.ico e public/vercel.svg
+- Neste projeto foram removidas as pastas /styles e /pages/api
+
+- Adicionar e configurar o Typescript no projeto:
+yarn add typescript @type/react @types/node -D
+
+- Renomear os arquivos da pasta /pages:
+  index.js para index.tsx
+  _app.js para _app.tsx
+
+- No arquivo index.tsx:
+  - Remover a linha: import styles from '../styles/Home.module.css';
+  - Remover o className que estiverem apontando para a pasta deste import que foi removida.
+  - Deixar apenas o Head com um título a gosto e a tag main.
+
+- No arquivo _app.tsx:
+  - Remover a linha do import '../styles/globals.css'
+
+- Motivo para não usar os imports do css, seria porque será utilizado o Styled-Components
+
+- Executar o comando:
+yarn dev
+
+Obs.: Ao executar este comando pela primeira vez, serão criados os arquivos tsconfig.json e next-env.ts,
+      porque o React detectou que estamos utilizando o Typescript no projeto.
+
+- Adicionar e configurar o ESLint no projeto:
+yarn add eslint -D
+yarn eslint --init
+
+- Este comando faz algumas perguntas. Neste exemplo as respostas foram:
+? How would you like to use ESLint?
+> To check syntax, find problems, and enforce code style
+? What type of modules does your project use?
+> JavaScript modules (import/export)
+? Which framework does your project use?
+> React
+? Does your project use Typescript?
+> Yes
+? Where does your code run? (selecionar os dois)
+> Browse
+> Node
+? How would you like to define a style for your project?
+> Use a popular style guide
+? Which style guide do you want to follow?
+  Airbnb (deve utilizar o ponto e vírgula no final das linhas)
+> Standard (No exemplo, foi utilizado este para não utiliza o ponto e vírgula no final das linhas)
+? What format do you want your config file to be in?
+> JSON
+? Would you like to install them now with npm?
+> Yes
+- Obs.: No exemplo ele permitiu usar o npm, mas foi utilizado o yarn. Então deixa instalar via npm,
+        depois exclui o arquivo package-lock.json e executa o yarn para instalar novamente:
+yarn
+
+- Neste momento o ESLint começa a informar algumas advertências no código.
+- Se você salvar algum arquivo com estas advertências, o arquivo é corrigido, porque no setting.json tem a configuração:
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+
+- Instalar ao ESLint o Prettier:
+yarn add prettier eslint-plugin-prettier eslint-config-prettier -D
+
+- Abrir o arquivo .eslintrc.json e alterar conforme está neste projeto de exemplo.
+- Colocar em env:
+    "jest": true (para o ESLint entender as variáveis globais do jest no nó env)
+- Colocar em extends:
+    "plugin:@typescript-eslint/recommended", (Por estar usando o typescript)
+    "prettier/@typescript-eslint", (Por estar usando o typescript)
+    "prettier/standard", (Por estar usando no ESLint a opção standard, ou seja, se for utilizada a Airbnb, deve ser alterada)
+    "prettier/react" (Por estar utilizando o React)
+- Colocar em plugins:
+   "prettier" (para vincular o prettier ao eslint)
+- Colocar em rules:
+    "prettier/prettier": "error", (para sinalizar qualquer erro que seja derivado do prettier, para deixar o código mais bonito e mais padronizado)
+    "space-before-function-paren": "off", (desabilitar as advertências para espaços entre o nome da função e os parênteses)
+    "react/prop-types": "off" (Por estar utilizando o typescript, não há necessidade de estar definindo os proptypes do React)
+
+- Criar na raiz do projeto o arquivo .eslintignore para ignorar advertências nas pastas indicadas neste arquivo.
+- O /*.js força ao ESLint não tentar corrigir arquivos js que estão na raiz do projeto
+
+- Neste momento, o ESLint entra em um conflito com o Prettier para utilização de ' e "
+- Para corrigir este conflito, criar o arquivo prettier.config.js
+module.exports = {
+  semi: false, (ponto e vírgula no final das linhas)
+  singleQuote: true, (utiliza aspas simples)
+  arrowParens: 'avoid', (não precisa colocar parênteses para arrow function com um único parâmetro)
+  trailingComma: 'none', (não precisa ter uma vírgula no final do objecto json)
+  endOfLine: 'auto'
+};
+
+- Com o ESLint precisa colocar ao import do React. No Next.js não precisaria.
+
+- Converter a forma de escrever a function:
+Trocar: export default function Home() { }
+Por:
+const Home: React.FC = () => {
+  ...
+}
+export default Home;
+
+- Obs: Outra opção seria informar o retorno da function, desta forma:
+export default function Home(): JSX.Element { }
+
+- No arquivo _app.tsx foi necessário:
+  - Adicionar: import { AppProps } from 'next/app'
+  - Adicionar o <AppProps> após o React.FC
+
+- Instalar a Extensão do VS Code: EditorConfig for VS Code - Manter o mesmo padrão em todos os editores da código.
+- Clicar no Explorer de arquivos com o botão direito e gerar o arquivo .editorconfig:
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = lf (adicionado para o editor entender que você quer o final da linha como lf, ao invés de CRLF)
+trim_trailing_whitespace = true (alterado)
+insert_final_newline = true (alterado)
+
+- Obs.: Esta opção depende do sistema operacional. No VS Code aparece no rodapé do editor LF ou CRLF, entre UTF-8 e Plain Text
+
+- Adicionar e configurar o Styled-Components:
+https://github.com/vercel/next.js/tree/canary/examples/with-styled-components-babel
+yarn add styled-components
+
+- Criar o arquivo babel.config.js
+module.exports = {
+  presets: ["next/babel"],
+  plugins: [
+    ["styled-components", { "ssr": true }],
+    "inline-react-svg"
+  ]
+};
+
+- Criar o arquivo /pages/_document.tsx - No render() pode ser definidos as opções que serão geradas no arquivo html final,
+  como lang="pt", charSet, links de fontes, links de icones e favicon, etc. Para aplicar a fonte selecionada, colocar no
+  global.ts (a seguir)
+
+- Adicionar as tipagens do styled-components:
+yarn add @types/styled-components -D
+
+- Obs.: Estas configurações server para as estilizações serem realizadas do lado do servidor.
+
+- Criar a pasta src e mover a pasta pages para dentro
+
+- Criar a pasta src/styles e colocar todo o conteúdo de arquivos deste exemplo dentro
+global.ts - Para definição dos estilos globais. Devemos importar este arquivo em _app.tsx e adicionar no return
+theme.ts - Estilizações do tema do projeto
+styled.d.ts - Para que o arquivo global.ts entenda as props do arquivo theme.ts
+
+- Para ter certeza que a estilizações estão vindo do servidor, tentar desativar do navegador,
+  pela opção do F12, em Debugger - Disable JavaScript
+
+- Criar a pasta assets com o arquivo de imagem svg, ao invés de colocar na plasta public (mais comum)
+
+- Instalar o Next.js + images - Utilitário para imagens no Next.js
+https://github.com/twopluszero/next-images
+yarn add next-images
+
+- Criar o arquivo next.config.js
+const withImages = require('next-images')
+
+module.exports = withImages({
+  esModule: true,
+})
+
+- No arquivo next-env.d.ts adicionar a linha para identificar os arquivos de imagens como um arquivo válido:
+/// <reference types="next-images" />
+
+- Instalar o babel-plugin-inline-react-svg:
+https://github.com/airbnb/babel-plugin-inline-react-svg
+yarn add babel-plugin-inline-react-svg -D
+
+- Adicionar a linha no arquivo babel.config.js:
+"inline-react-svg"
+
+- Feito isso, podemos importar o arquivo de imagem desta forma, como um componente React:
+import RocketseatLogo from '../assets/rocketseat.svg'
+
+- Podendo adicionar a imagem na página:
+<RocketseatLogo />
+
+- Adicionar os styled-components de cada página em styles/pages...
+
+- Dicas:
+jest
+SWR
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
