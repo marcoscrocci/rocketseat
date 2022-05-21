@@ -1,6 +1,14 @@
 - Instalar o Expo CLI
 sudo npm install -g expo-cli
 
+- Criar um novo aplicativo Expo:
+expo init helpdesk
+cd helpdesk
+
+- Iniciar o aplicativo Expo:
+expo start
+
+
 - Biblioteca do Firebase para React Native
 https://rnfirebase.io/
 yarn add @react-native-firebase/app
